@@ -11,9 +11,10 @@ interface Lookup {
   cache: string;
 }
 
-async function lookup(id: string): Promise<Lookup> {
+async function lookup(id: string, attempt: number): Promise<Lookup> {
   const base = process.env.API_URL ?? 'http://localhost:3000';
-  const response = await fetch(`${base}/products/${id}`, { cache: 'no-store' });
+  // Next.js memorizes identical fetch calls during one render. The query keeps the two reads independent.
+  const response = await fetch(`${base}/products/${id}?attempt=${attempt}`, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error('Falha ao consultar o produto');
   }
@@ -26,8 +27,8 @@ function formatPrice(cents: number): string {
 }
 
 export default async function Page() {
-  const first = await lookup('caderno');
-  const second = await lookup('caderno');
+  const first = await lookup('caderno', 1);
+  const second = await lookup('caderno', 2);
 
   return (
     <main>
