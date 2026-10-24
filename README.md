@@ -14,7 +14,7 @@ A lista de produtos não entra no cache. O exemplo concentra a política no recu
 docker compose up --build
 ```
 
-A API fica em `http://localhost:3011` e a página em `http://localhost:3006`.
+A API fica em `http://localhost:3011` e a página em `http://localhost:3006`. O Redis fica só na rede do Compose, para não disputar a porta 6379 da máquina.
 
 ```bash
 curl http://localhost:3011/products/caderno
